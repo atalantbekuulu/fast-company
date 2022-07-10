@@ -16,7 +16,7 @@ const Users =()=>{
       <td>{user.qualities.map((qualitie)=> <span className={'badge m-1 bg-'+qualitie.color} key={qualitie._id}>{qualitie.name}</span>)}</td>
       {<td key={user.profession._id}>{user.profession.name}</td>}
       <td>{user.completedMeetings}</td>
-      <td>{user.rate}</td>
+      <td>{user.rate}/5</td>
       <td><button onClick={()=>handleDelete(user._id)} className="btn btn-danger m-1">delete</button></td>
     </tr>)
      })
