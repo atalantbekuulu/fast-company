@@ -10,13 +10,14 @@ import _ from "lodash";
 
 const Users = () => {
     const pageSize = 8;
+
     const [users, setUsers] = useState();
     const handleDelete = (userId) => {
         setUsers(users.filter((user) => user._id !== userId));
     };
     useEffect(() => {
         api.users.default.fetchAll().then((data) => setUsers(data));
-    });
+    }, []);
 
     const handleToggleBookMark = (id) => {
         setUsers(
