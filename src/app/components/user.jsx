@@ -1,40 +1,36 @@
-import { React, useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import api from "../api";
 import QualitiesList from "./qualitiesList";
-const User = ({ match, history }) => {
-    const userId = match.params.userId;
+import { useHistory } from "react-router-dom";
+
+const UserPage = ({ userId }) => {
+    const history = useHistory();
     const [user, setUser] = useState();
     useEffect(() => {
         api.users.default.getById(userId).then((data) => setUser(data));
-    }, [user]);
-    const handleGetAllusers = () => {
+    });
+    const handleClick = () => {
         history.push("/users");
     };
-    if (user)
+    if (user) {
         return (
-            <>
-                <h1>{user.name}</h1>
+            <div>
+                <h1> {user.name}</h1>
                 <h2>Профессия: {user.profession.name}</h2>
                 <QualitiesList qualities={user.qualities} />
-                <p>completedMeetings:{user.completedMeetings}</p>
-                <h3>Rate:{user.rate}</h3>
-                <button
-                    onClick={() => {
-                        handleGetAllusers();
-                    }}
-                >
-                    {" "}
-                    Все пользователи
-                </button>
-            </>
+                <p>completedMeetings: {user.completedMeetings}</p>
+                <h2>Rate: {user.rate}</h2>
+                <button onClick={handleClick}> Все Пользователи</button>
+            </div>
         );
-    return <h1>loading...</h1>;
+    } else {
+        return <h1>Loading</h1>;
+    }
 };
 
-User.propTypes = {
-    match: PropTypes.object,
-    history: PropTypes.object
+UserPage.propTypes = {
+    userId: PropTypes.string.isRequired
 };
 
-export default User;
+export default UserPage;

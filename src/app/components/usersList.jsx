@@ -1,17 +1,40 @@
 import React, { useState, useEffect } from "react";
 import Pagination from "./pagination";
 import { paginate } from "../utils/paginate";
-import PropTypes from "prop-types";
 import GroupList from "./groupList";
 import api from "../api";
 import SearchStatus from "./searchStatus";
 import UsersTable from "./usersTable";
 import _ from "lodash";
+import SearchForm from "./searchForm";
 
-const Users = () => {
+const UsersList = () => {
     const pageSize = 8;
-
+    const [dataInputValue, setDataInputValue] = useState("");
     const [users, setUsers] = useState();
+    const [usersBase, setTest] = useState();
+    useEffect(() => {
+        api.users.default.fetchAll().then((data) => setTest(data));
+    }, []);
+
+    const handleChange = (e) => {
+        e.preventDefault();
+        const data = { userName: "" };
+        setDataInputValue(e.target.value);
+        data.userName = e.target.value;
+        getFilterUser(data);
+    };
+
+    const getFilterUser = (data) => {
+        const newFilteredUsers = usersBase.filter((user) => {
+            return user.name
+                .toLowerCase()
+                .includes(data.userName.toLowerCase());
+        });
+        setUsers(newFilteredUsers);
+        setSelectProf();
+    };
+
     const handleDelete = (userId) => {
         setUsers(users.filter((user) => user._id !== userId));
     };
@@ -46,6 +69,9 @@ const Users = () => {
         setCurrentPage(1);
     }, [selectProf]);
     const handleProfessionSelect = (item) => {
+        setDataInputValue("");
+        console.log(dataInputValue);
+        setUsers(usersBase);
         setSelectProf(item);
     };
     const handleSort = (item) => {
@@ -89,7 +115,10 @@ const Users = () => {
                     )}
                     <div className="d-flex flex-column">
                         <SearchStatus length={count} />
-
+                        <SearchForm
+                            dataInputValue={dataInputValue}
+                            onChange={handleChange}
+                        />
                         {count > 0 && (
                             <UsersTable
                                 users={userCrop}
@@ -115,8 +144,4 @@ const Users = () => {
     return <h1>loading...</h1>;
 };
 
-Users.propTypes = {
-    users: PropTypes.array
-};
-
-export default Users;
+export default UsersList;
