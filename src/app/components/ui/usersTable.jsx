@@ -1,29 +1,37 @@
 import React from "react";
 import PropTypes from "prop-types";
+
 import BookMark from "../common/bookmark";
 import Qualities from "./qualities";
 import Table from "../common/table";
+import { Link } from "react-router-dom";
 
-const UsersTable = ({
+const UserTable = ({
     users,
     onSort,
     selectedSort,
-    onDelete,
     onToggleBookMark,
+    onDelete,
     ...rest
 }) => {
     const columns = {
-        name: { path: "name", name: "Имя " },
+        name: {
+            path: "name",
+            name: "Имя",
+            component: (user) => (
+                <Link to={`/users/${user._id}`}>{user.name}</Link>
+            )
+        },
         qualities: {
-            name: "Качества ",
+            name: "Качества",
             component: (user) => <Qualities qualities={user.qualities} />
         },
-        professions: { path: "profession.name", name: "Профессия " },
+        professions: { path: "profession.name", name: "Профессия" },
         completedMeetings: {
             path: "completedMeetings",
-            name: "Встретился, раз "
+            name: "Встретился, раз"
         },
-        rate: { path: "rate", name: "Оценка " },
+        rate: { path: "rate", name: "Оценка" },
         bookmark: {
             path: "bookmark",
             name: "Избранное",
@@ -55,12 +63,12 @@ const UsersTable = ({
     );
 };
 
-UsersTable.propTypes = {
+UserTable.propTypes = {
     users: PropTypes.array.isRequired,
-    onSort: PropTypes.func,
-    selectedSort: PropTypes.object,
+    onSort: PropTypes.func.isRequired,
+    selectedSort: PropTypes.object.isRequired,
     onToggleBookMark: PropTypes.func.isRequired,
     onDelete: PropTypes.func.isRequired
 };
 
-export default UsersTable;
+export default UserTable;
