@@ -111,7 +111,7 @@ const RegisterForm = () => {
         return Object.keys(errors).length === 0;
     };
     const isValid = Object.keys(errors).length === 0;
-    console.log(data.profession);
+
     const handleSubmit = (e) => {
         e.preventDefault();
         const isValid = validate();
